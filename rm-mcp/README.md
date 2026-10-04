@@ -1,4 +1,4 @@
-# Odoo MCP lecture seule (profil commercial)
+# RM MCP : Odoo lecture seule (profil commercial)
 
 Accès **uniquement en lecture** à : calendrier, CRM, ventes, projet, comptabilité
 (+ partenaires/produits/devises comme référentiels). Toute autre demande
