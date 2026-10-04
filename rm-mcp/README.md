@@ -18,13 +18,13 @@ Accès **uniquement en lecture** à : calendrier, CRM, ventes, projet, comptabil
 
 ## Installation sur le VPS
 ```bash
-sudo useradd -r -s /usr/sbin/nologin odoomcp
-sudo mkdir -p /opt/odoo-readonly-mcp && sudo cp server.py requirements.txt .env.example /opt/odoo-readonly-mcp/
-cd /opt/odoo-readonly-mcp
+sudo useradd -r -s /usr/sbin/nologin rmmcp
+sudo mkdir -p /opt/rm-mcp && sudo cp server.py requirements.txt .env.example /opt/rm-mcp/
+cd /opt/rm-mcp
 sudo python3 -m venv venv && sudo venv/bin/pip install -r requirements.txt
 sudo cp .env.example .env && sudo nano .env      # remplir + MCP_AUTH_TOKEN=$(openssl rand -hex 32)
-sudo chown -R odoomcp: . && sudo chmod 600 .env
-sudo cp odoo-readonly-mcp.service /etc/systemd/system/ && sudo systemctl enable --now odoo-readonly-mcp
+sudo chown -R rmmcp: . && sudo chmod 600 .env
+sudo cp rm-mcp.service /etc/systemd/system/ && sudo systemctl enable --now rm-mcp
 ```
 Écoute sur `127.0.0.1:8765`. Expose-le via nginx/Caddy en HTTPS
 (ex. `https://mcp.example.com/mcp`) et mets `MCP_ALLOWED_HOSTS=mcp.example.com` dans `.env`.

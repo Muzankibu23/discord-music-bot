@@ -1,0 +1,16 @@
+[Unit]
+Description=RM MCP (Odoo lecture seule)
+After=network.target
+
+[Service]
+User=rmmcp
+WorkingDirectory=/opt/rm-mcp
+EnvironmentFile=/opt/rm-mcp/.env
+ExecStart=/opt/rm-mcp/venv/bin/python server.py
+Restart=always
+NoNewPrivileges=true
+ProtectSystem=strict
+PrivateTmp=true
+
+[Install]
+WantedBy=multi-user.target
