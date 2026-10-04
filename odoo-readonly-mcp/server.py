@@ -199,14 +199,25 @@ def refuse(request: str = "") -> str:
 
 
 class BearerAuth:
-    """Middleware ASGI : exige 'Authorization: Bearer <MCP_AUTH_TOKEN>'."""
+    """Middleware ASGI : accepte soit 'Authorization: Bearer <token>', soit le
+    token dans le chemin : /<token>/mcp (pour les custom connectors claude.ai,
+    qui ne permettent pas de header personnalisé)."""
     def __init__(self, app):
         self.app = app
 
     async def __call__(self, scope, receive, send):
         if scope["type"] == "http":
-            auth = dict(scope["headers"]).get(b"authorization", b"").decode()
-            if not hmac.compare_digest(auth, f"Bearer {MCP_AUTH_TOKEN}"):
+            prefix = f"/{MCP_AUTH_TOKEN}"
+            path = scope["path"]
+            ok = False
+            if path == prefix or path.startswith(prefix + "/"):
+                ok = True
+                scope = dict(scope, path=path[len(prefix):] or "/",
+                             raw_path=scope.get("raw_path", b"")[len(prefix):] or b"/")
+            else:
+                auth = dict(scope["headers"]).get(b"authorization", b"").decode()
+                ok = hmac.compare_digest(auth, f"Bearer {MCP_AUTH_TOKEN}")
+            if not ok:
                 await send({"type": "http.response.start", "status": 401,
                             "headers": [(b"content-type", b"text/plain")]})
                 await send({"type": "http.response.body", "body": b"unauthorized"})
