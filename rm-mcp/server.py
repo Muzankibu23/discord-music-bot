@@ -18,7 +18,9 @@ import httpx
 from mcp.server.fastmcp import FastMCP
 from mcp.server.transport_security import TransportSecuritySettings
 
-ODOO_URL = os.environ["ODOO_URL"].rstrip("/")
+ODOO_URL = os.environ["ODOO_URL"].strip().rstrip("/")
+if not ODOO_URL.startswith(("http://", "https://")):
+    ODOO_URL = "https://" + ODOO_URL
 ODOO_DB = os.environ["ODOO_DB"]
 ODOO_LOGIN = os.environ["ODOO_LOGIN"]
 ODOO_API_KEY = os.environ["ODOO_API_KEY"]
