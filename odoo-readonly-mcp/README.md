@@ -24,7 +24,7 @@ cd /opt/odoo-readonly-mcp
 sudo python3 -m venv venv && sudo venv/bin/pip install -r requirements.txt
 sudo cp .env.example .env && sudo nano .env      # remplir + MCP_AUTH_TOKEN=$(openssl rand -hex 32)
 sudo chown -R odoomcp: . && sudo chmod 600 .env
-sudo cp odoo-mcp.service /etc/systemd/system/ && sudo systemctl enable --now odoo-mcp
+sudo cp odoo-readonly-mcp.service /etc/systemd/system/ && sudo systemctl enable --now odoo-readonly-mcp
 ```
 Écoute sur `127.0.0.1:8765`. Expose-le via nginx/Caddy en HTTPS
 (ex. `https://mcp.example.com/mcp`) et mets `MCP_ALLOWED_HOSTS=mcp.example.com` dans `.env`.

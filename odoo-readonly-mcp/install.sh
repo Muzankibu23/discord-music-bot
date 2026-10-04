@@ -2,6 +2,8 @@
 # Usage (sur le VPS, en root) : bash install.sh
 set -euo pipefail
 [ "$(id -u)" = 0 ] || { echo "Lance en root (sudo bash install.sh)"; exit 1; }
+UNIT=/etc/systemd/system/odoo-readonly-mcp.service
+[ -e "$UNIT" ] && { echo "$UNIT existe déjà, abandon (rien n'a été modifié)."; exit 1; }
 D=/opt/odoo-readonly-mcp
 read -rp "URL Odoo (https://odoo.example.com) : " ODOO_URL
 read -rp "Base de données Odoo : " ODOO_DB
@@ -26,9 +28,9 @@ MCP_PORT=8765
 MCP_ALLOWED_HOSTS=$HOSTN
 ENV
 chown -R odoomcp: "$D"; chmod 600 "$D/.env"
-cp "$(dirname "$0")/odoo-mcp.service" /etc/systemd/system/
-systemctl daemon-reload && systemctl enable --now odoo-mcp
-sleep 2; systemctl is-active odoo-mcp
+cp "$(dirname "$0")/odoo-readonly-mcp.service" "$UNIT"
+systemctl daemon-reload && systemctl enable --now odoo-readonly-mcp
+sleep 2; systemctl is-active odoo-readonly-mcp
 echo
 echo "MCP écoute sur 127.0.0.1:8765/mcp  (reverse proxy HTTPS à ajouter)"
 echo "Token Bearer (note-le, affiché une seule fois) : $TOKEN"
