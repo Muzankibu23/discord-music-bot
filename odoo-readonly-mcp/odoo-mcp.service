@@ -1,0 +1,16 @@
+[Unit]
+Description=Odoo read-only MCP
+After=network.target
+
+[Service]
+User=odoomcp
+WorkingDirectory=/opt/odoo-readonly-mcp
+EnvironmentFile=/opt/odoo-readonly-mcp/.env
+ExecStart=/opt/odoo-readonly-mcp/venv/bin/python server.py
+Restart=always
+NoNewPrivileges=true
+ProtectSystem=strict
+PrivateTmp=true
+
+[Install]
+WantedBy=multi-user.target
